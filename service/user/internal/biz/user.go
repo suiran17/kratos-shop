@@ -17,6 +17,9 @@ type User struct {
 	Role     int
 }
 
+// UserRepo 注意这一行新增的 mock 数据的命令
+// go install github.com/golang/mock/mockgen@latest
+//go:generate mockgen -destination=../mocks/mrepo/user.go -package=mrepo . UserRepo
 type UserRepo interface {
 	CreateUser(context.Context, *User) (*User, error)
 }
