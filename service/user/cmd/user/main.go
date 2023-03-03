@@ -4,6 +4,10 @@ import (
 	"flag"
 	"os"
 
+	"github.com/go-kratos/kratos/v2/registry"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+
 	"user/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
@@ -11,16 +15,19 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name = "shop.users.service"
+	Name = "shop.user.service"
 	// Version is the version of the compiled software.
-	Version = "v1"
+	Version = "user.v1"
 	// flagconf is the config flag.
 	flagconf string
 
@@ -33,7 +40,7 @@ func init() {
 
 func newApp(logger log.Logger, gs *grpc.Server, rr registry.Registrar) *kratos.App {
 	return kratos.New(
-		kratos.ID(id+"shop.user.service"),
+		kratos.ID(id+"user service"),
 		kratos.Name(Name),
 		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
@@ -41,8 +48,30 @@ func newApp(logger log.Logger, gs *grpc.Server, rr registry.Registrar) *kratos.A
 		kratos.Server(
 			gs,
 		),
-		kratos.Registrar(rr), // consul 的引入
+		kratos.Registrar(rr), // 服务注册与发现
 	)
+}
+
+// Set global trace provider 设置链路追逐的方法
+func setTracerProvider(url string) error {
+	// Create the Jaeger exporter
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
+	if err != nil {
+		return err
+	}
+	tp := tracesdk.NewTracerProvider(
+		// Set the sampling rate based on the parent span to 100%
+		tracesdk.WithSampler(tracesdk.ParentBased(tracesdk.TraceIDRatioBased(1.0))),
+		// Always be sure to batch in production.
+		tracesdk.WithBatcher(exp),
+		// Record information about this application in an Resource.
+		tracesdk.WithResource(resource.NewSchemaless(
+			semconv.ServiceNameKey.String(Name),
+			attribute.String("env", "dev"),
+		)),
+	)
+	otel.SetTracerProvider(tp)
+	return nil
 }
 
 func main() {
@@ -71,11 +100,16 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
-	// consul 的引入
+	// 加入链路追踪的配置
+	if err := setTracerProvider(bc.Trace.Endpoint); err != nil {
+		panic(err)
+	}
+
 	var rc conf.Registry
 	if err := c.Scan(&rc); err != nil {
 		panic(err)
 	}
+
 	app, cleanup, err := wireApp(bc.Server, bc.Data, &rc, logger)
 	if err != nil {
 		panic(err)

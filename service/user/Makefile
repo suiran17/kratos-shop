@@ -57,6 +57,7 @@ generate:
 	go generate ./...
 
 .PHONY: wire
+# wire
 wire:
 	cd cmd/user/ && wire
 

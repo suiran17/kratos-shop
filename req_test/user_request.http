@@ -1,0 +1,18 @@
+# curl --location --request POST 'localhost:8097/api/users/register'
+#--header 'Content-Type: application/json'
+#--data-raw '{
+#    "mobile":"18800277236",
+#    "username":"zhangSan",
+#    "password":"admin123"
+#}'
+POST localhost:8097/api/users/register
+Content-Type: application/json
+
+{
+  "mobile": "18800277236",
+  "username": "zhangSan",
+  "password": "admin123"
+}
+
+###
+

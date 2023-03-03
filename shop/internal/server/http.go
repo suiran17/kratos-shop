@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	jwt2 "github.com/golang-jwt/jwt/v4"
@@ -23,6 +24,7 @@ func NewHTTPServer(c *conf.Server, ac *conf.Auth, s *service.ShopService, logger
 		http.Middleware(
 			recovery.Recovery(),
 			validate.Validator(), // 接口访问的参数校验
+			tracing.Server(),     // 这里是本篇新增的
 			selector.Server( // jwt 验证
 				jwt.Server(func(token *jwt2.Token) (interface{}, error) {
 					return []byte(ac.JwtKey), nil
