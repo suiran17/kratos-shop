@@ -10,32 +10,34 @@ import (
 // GoodsService is a goods service.
 type GoodsService struct {
 	v1.UnimplementedGoodsServer
+
 	cac *biz.CategoryUsecase
-	// bc      *biz.BrandUsecase
-	gt *biz.GoodsTypeUsecase
-	// s       *biz.SpecificationUsecase
+	bc  *biz.BrandUsecase
+	gt  *biz.GoodsTypeUsecase
+	s   *biz.SpecificationUsecase
 	// ga      *biz.GoodsAttrUsecase
 	// g       *biz.GoodsUsecase
 	// esGoods *biz.EsGoodsUsecase
+
 	log *log.Helper
 }
 
 // NewGoodsService new a goods service.
 func NewGoodsService(
-// bc *biz.BrandUsecase,
+	bc *biz.BrandUsecase,
 	cac *biz.CategoryUsecase,
 	gt *biz.GoodsTypeUsecase,
-// s *biz.SpecificationUsecase,
+	s *biz.SpecificationUsecase,
 // ga *biz.GoodsAttrUsecase,
 // gc *biz.GoodsUsecase,
 // esGoods *biz.EsGoodsUsecase,
 	logger log.Logger,
 ) *GoodsService {
 	return &GoodsService{
-		// bc:      bc,
+		bc:  bc,
 		cac: cac,
 		gt:  gt,
-		// s:       s,
+		s:   s,
 		// ga:      ga,
 		// g:       gc,
 		// esGoods: esGoods,

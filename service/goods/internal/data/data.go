@@ -27,6 +27,7 @@ var ProviderSet = wire.NewSet(
 	NewCategoryRepo,
 	NewGoodsTypeRepo,
 	NewBrandRepo,
+	NewSpecificationRepo,
 
 	NewTransaction,
 

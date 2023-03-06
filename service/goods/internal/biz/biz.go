@@ -12,7 +12,7 @@ var ProviderSet = wire.NewSet(
 	NewGoodsTypeUsecase,
 
 	NewBrandUsecase,
-	// NewSpecificationUsecase,
+	NewSpecificationUsecase,
 	// NewGoodsAttrUsecase,
 	// NewGoodsUsecase,
 	// NewGoodsSkuUsecase,

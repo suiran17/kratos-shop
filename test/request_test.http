@@ -63,3 +63,26 @@ Content-Type:application/json
   "sort": 1
 }
 
+###
+GRPC localhost:50053/goods.v1.Goods/CreateGoodsSpecification
+Content-Type:application/json
+
+{
+  "typeId": 1,
+  "name": "颜色",
+  "sort": 1,
+  "status": true,
+  "isSku": true,
+  "isSelect": true,
+  "specificationValue": [
+    {
+      "value": "亮黑色",
+      "sort": 1
+    },
+    {
+      "value": "釉白色",
+      "sort": 2
+    }
+  ]
+}
+

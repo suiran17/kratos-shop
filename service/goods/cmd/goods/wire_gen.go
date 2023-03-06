@@ -31,13 +31,16 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
+	brandRepo := data.NewBrandRepo(dataData, logger)
+	brandUsecase := biz.NewBrandUsecase(brandRepo, logger)
 	categoryRepo := data.NewCategoryRepo(dataData, logger)
 	categoryUsecase := biz.NewCategoryUsecase(categoryRepo, logger)
 	goodsTypeRepo := data.NewGoodsTypeRepo(dataData, logger)
 	transaction := data.NewTransaction(dataData)
-	brandRepo := data.NewBrandRepo(dataData, logger)
 	goodsTypeUsecase := biz.NewGoodsTypeUsecase(goodsTypeRepo, transaction, brandRepo, logger)
-	goodsService := service.NewGoodsService(categoryUsecase, goodsTypeUsecase, logger)
+	specificationRepo := data.NewSpecificationRepo(dataData, logger)
+	specificationUsecase := biz.NewSpecificationUsecase(specificationRepo, goodsTypeRepo, transaction, logger)
+	goodsService := service.NewGoodsService(brandUsecase, categoryUsecase, goodsTypeUsecase, specificationUsecase, logger)
 	grpcServer := server.NewGRPCServer(confServer, goodsService, logger)
 	app := newApp(logger, grpcServer)
 	return app, func() {

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Goods_CreateCategory_FullMethodName  = "/goods.v1.Goods/CreateCategory"
-	Goods_CreateGoodsType_FullMethodName = "/goods.v1.Goods/CreateGoodsType"
+	Goods_CreateCategory_FullMethodName           = "/goods.v1.Goods/CreateCategory"
+	Goods_CreateGoodsType_FullMethodName          = "/goods.v1.Goods/CreateGoodsType"
+	Goods_CreateGoodsSpecification_FullMethodName = "/goods.v1.Goods/CreateGoodsSpecification"
 )
 
 // GoodsClient is the client API for Goods service.
@@ -30,6 +31,8 @@ type GoodsClient interface {
 	CreateCategory(ctx context.Context, in *CategoryInfoRequest, opts ...grpc.CallOption) (*CategoryInfoResponse, error)
 	// 商品类型基本信息创建
 	CreateGoodsType(ctx context.Context, in *GoodsTypeRequest, opts ...grpc.CallOption) (*GoodsTypeResponse, error)
+	// 商品规格或属性的信息
+	CreateGoodsSpecification(ctx context.Context, in *SpecificationRequest, opts ...grpc.CallOption) (*SpecificationResponse, error)
 }
 
 type goodsClient struct {
@@ -58,6 +61,15 @@ func (c *goodsClient) CreateGoodsType(ctx context.Context, in *GoodsTypeRequest,
 	return out, nil
 }
 
+func (c *goodsClient) CreateGoodsSpecification(ctx context.Context, in *SpecificationRequest, opts ...grpc.CallOption) (*SpecificationResponse, error) {
+	out := new(SpecificationResponse)
+	err := c.cc.Invoke(ctx, Goods_CreateGoodsSpecification_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoodsServer is the server API for Goods service.
 // All implementations must embed UnimplementedGoodsServer
 // for forward compatibility
@@ -65,6 +77,8 @@ type GoodsServer interface {
 	CreateCategory(context.Context, *CategoryInfoRequest) (*CategoryInfoResponse, error)
 	// 商品类型基本信息创建
 	CreateGoodsType(context.Context, *GoodsTypeRequest) (*GoodsTypeResponse, error)
+	// 商品规格或属性的信息
+	CreateGoodsSpecification(context.Context, *SpecificationRequest) (*SpecificationResponse, error)
 	mustEmbedUnimplementedGoodsServer()
 }
 
@@ -77,6 +91,9 @@ func (UnimplementedGoodsServer) CreateCategory(context.Context, *CategoryInfoReq
 }
 func (UnimplementedGoodsServer) CreateGoodsType(context.Context, *GoodsTypeRequest) (*GoodsTypeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGoodsType not implemented")
+}
+func (UnimplementedGoodsServer) CreateGoodsSpecification(context.Context, *SpecificationRequest) (*SpecificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGoodsSpecification not implemented")
 }
 func (UnimplementedGoodsServer) mustEmbedUnimplementedGoodsServer() {}
 
@@ -127,6 +144,24 @@ func _Goods_CreateGoodsType_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Goods_CreateGoodsSpecification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SpecificationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoodsServer).CreateGoodsSpecification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Goods_CreateGoodsSpecification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoodsServer).CreateGoodsSpecification(ctx, req.(*SpecificationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Goods_ServiceDesc is the grpc.ServiceDesc for Goods service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,6 +176,10 @@ var Goods_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateGoodsType",
 			Handler:    _Goods_CreateGoodsType_Handler,
+		},
+		{
+			MethodName: "CreateGoodsSpecification",
+			Handler:    _Goods_CreateGoodsSpecification_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
