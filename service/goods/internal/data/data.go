@@ -30,6 +30,9 @@ var ProviderSet = wire.NewSet(
 	NewBrandRepo,
 	NewSpecificationRepo,
 	NewGoodsAttrRepo,
+	NewGoodsRepo,
+	NewGoodsSkuRepoRepo,
+	NewInventoryRepo,
 
 	NewTransaction,
 

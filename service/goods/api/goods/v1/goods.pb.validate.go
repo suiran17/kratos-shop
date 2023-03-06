@@ -1726,3 +1726,982 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AttrResponseValidationError{}
+
+// Validate checks the field values on CreateGoodsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateGoodsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateGoodsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateGoodsRequestMultiError, or nil if none found.
+func (m *CreateGoodsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if m.GetCategoryId() < 1 {
+		err := CreateGoodsRequestValidationError{
+			field:  "CategoryId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetBrandId() < 1 {
+		err := CreateGoodsRequestValidationError{
+			field:  "BrandId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetTypeId() < 1 {
+		err := CreateGoodsRequestValidationError{
+			field:  "TypeId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetName()) < 1 {
+		err := CreateGoodsRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for NameAlias
+
+	// no validation rules for GoodsTags
+
+	if utf8.RuneCountInString(m.GetGoodsSn()) < 1 {
+		err := CreateGoodsRequestValidationError{
+			field:  "GoodsSn",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for ShopPrice
+
+	// no validation rules for MarketPrice
+
+	// no validation rules for Inventory
+
+	// no validation rules for GoodsBrief
+
+	// no validation rules for GoodsFrontImage
+
+	// no validation rules for ShipFree
+
+	// no validation rules for ShipId
+
+	// no validation rules for IsNew
+
+	// no validation rules for IsHot
+
+	// no validation rules for OnSale
+
+	for idx, item := range m.GetSku() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateGoodsRequestValidationError{
+						field:  fmt.Sprintf("Sku[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateGoodsRequestValidationError{
+						field:  fmt.Sprintf("Sku[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CreateGoodsRequestValidationError{
+					field:  fmt.Sprintf("Sku[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CreateGoodsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsRequestMultiError is an error wrapping multiple validation errors
+// returned by CreateGoodsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type CreateGoodsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsRequestMultiError) AllErrors() []error { return m }
+
+// CreateGoodsRequestValidationError is the validation error returned by
+// CreateGoodsRequest.Validate if the designated constraints aren't met.
+type CreateGoodsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsRequestValidationError) ErrorName() string {
+	return "CreateGoodsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsRequestValidationError{}
+
+// Validate checks the field values on CreateGoodsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateGoodsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateGoodsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateGoodsResponseMultiError, or nil if none found.
+func (m *CreateGoodsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for ID
+
+	if len(errors) > 0 {
+		return CreateGoodsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsResponseMultiError is an error wrapping multiple validation
+// errors returned by CreateGoodsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CreateGoodsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsResponseMultiError) AllErrors() []error { return m }
+
+// CreateGoodsResponseValidationError is the validation error returned by
+// CreateGoodsResponse.Validate if the designated constraints aren't met.
+type CreateGoodsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsResponseValidationError) ErrorName() string {
+	return "CreateGoodsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsResponseValidationError{}
+
+// Validate checks the field values on CreateGoodsRequestGoodsSku with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateGoodsRequestGoodsSku) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateGoodsRequestGoodsSku with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateGoodsRequestGoodsSkuMultiError, or nil if none found.
+func (m *CreateGoodsRequestGoodsSku) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsRequestGoodsSku) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for GoodsId
+
+	if utf8.RuneCountInString(m.GetSkuName()) < 1 {
+		err := CreateGoodsRequestGoodsSkuValidationError{
+			field:  "SkuName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetCode()) < 1 {
+		err := CreateGoodsRequestGoodsSkuValidationError{
+			field:  "Code",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetBarCode()) < 1 {
+		err := CreateGoodsRequestGoodsSkuValidationError{
+			field:  "BarCode",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Price
+
+	// no validation rules for PromotionPrice
+
+	// no validation rules for Points
+
+	// no validation rules for Image
+
+	// no validation rules for Sort
+
+	// no validation rules for Inventory
+
+	for idx, item := range m.GetSpecificationInfo() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuValidationError{
+						field:  fmt.Sprintf("SpecificationInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuValidationError{
+						field:  fmt.Sprintf("SpecificationInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CreateGoodsRequestGoodsSkuValidationError{
+					field:  fmt.Sprintf("SpecificationInfo[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for idx, item := range m.GetGroupAttrInfo() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuValidationError{
+						field:  fmt.Sprintf("GroupAttrInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuValidationError{
+						field:  fmt.Sprintf("GroupAttrInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CreateGoodsRequestGoodsSkuValidationError{
+					field:  fmt.Sprintf("GroupAttrInfo[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CreateGoodsRequestGoodsSkuMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsRequestGoodsSkuMultiError is an error wrapping multiple
+// validation errors returned by CreateGoodsRequestGoodsSku.ValidateAll() if
+// the designated constraints aren't met.
+type CreateGoodsRequestGoodsSkuMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsRequestGoodsSkuMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsRequestGoodsSkuMultiError) AllErrors() []error { return m }
+
+// CreateGoodsRequestGoodsSkuValidationError is the validation error returned
+// by CreateGoodsRequestGoodsSku.Validate if the designated constraints aren't met.
+type CreateGoodsRequestGoodsSkuValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsRequestGoodsSkuValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsRequestGoodsSkuValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsRequestGoodsSkuValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsRequestGoodsSkuValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsRequestGoodsSkuValidationError) ErrorName() string {
+	return "CreateGoodsRequestGoodsSkuValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsRequestGoodsSkuValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsRequestGoodsSku.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsRequestGoodsSkuValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsRequestGoodsSkuValidationError{}
+
+// Validate checks the field values on CreateGoodsRequestGoodsSkuSpecification
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CreateGoodsRequestGoodsSkuSpecification) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateGoodsRequestGoodsSkuSpecification with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// CreateGoodsRequestGoodsSkuSpecificationMultiError, or nil if none found.
+func (m *CreateGoodsRequestGoodsSkuSpecification) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsRequestGoodsSkuSpecification) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetSId() < 1 {
+		err := CreateGoodsRequestGoodsSkuSpecificationValidationError{
+			field:  "SId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetVId() < 1 {
+		err := CreateGoodsRequestGoodsSkuSpecificationValidationError{
+			field:  "VId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CreateGoodsRequestGoodsSkuSpecificationMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsRequestGoodsSkuSpecificationMultiError is an error wrapping
+// multiple validation errors returned by
+// CreateGoodsRequestGoodsSkuSpecification.ValidateAll() if the designated
+// constraints aren't met.
+type CreateGoodsRequestGoodsSkuSpecificationMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsRequestGoodsSkuSpecificationMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsRequestGoodsSkuSpecificationMultiError) AllErrors() []error { return m }
+
+// CreateGoodsRequestGoodsSkuSpecificationValidationError is the validation
+// error returned by CreateGoodsRequestGoodsSkuSpecification.Validate if the
+// designated constraints aren't met.
+type CreateGoodsRequestGoodsSkuSpecificationValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) ErrorName() string {
+	return "CreateGoodsRequestGoodsSkuSpecificationValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsRequestGoodsSkuSpecificationValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsRequestGoodsSkuSpecification.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsRequestGoodsSkuSpecificationValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsRequestGoodsSkuSpecificationValidationError{}
+
+// Validate checks the field values on CreateGoodsRequestGoodsSkuGroupAttr with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *CreateGoodsRequestGoodsSkuGroupAttr) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateGoodsRequestGoodsSkuGroupAttr
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// CreateGoodsRequestGoodsSkuGroupAttrMultiError, or nil if none found.
+func (m *CreateGoodsRequestGoodsSkuGroupAttr) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsRequestGoodsSkuGroupAttr) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetGroupId() < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrValidationError{
+			field:  "GroupId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetGroupName()) < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrValidationError{
+			field:  "GroupName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetAttrInfo() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuGroupAttrValidationError{
+						field:  fmt.Sprintf("AttrInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, CreateGoodsRequestGoodsSkuGroupAttrValidationError{
+						field:  fmt.Sprintf("AttrInfo[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return CreateGoodsRequestGoodsSkuGroupAttrValidationError{
+					field:  fmt.Sprintf("AttrInfo[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return CreateGoodsRequestGoodsSkuGroupAttrMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsRequestGoodsSkuGroupAttrMultiError is an error wrapping multiple
+// validation errors returned by
+// CreateGoodsRequestGoodsSkuGroupAttr.ValidateAll() if the designated
+// constraints aren't met.
+type CreateGoodsRequestGoodsSkuGroupAttrMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsRequestGoodsSkuGroupAttrMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsRequestGoodsSkuGroupAttrMultiError) AllErrors() []error { return m }
+
+// CreateGoodsRequestGoodsSkuGroupAttrValidationError is the validation error
+// returned by CreateGoodsRequestGoodsSkuGroupAttr.Validate if the designated
+// constraints aren't met.
+type CreateGoodsRequestGoodsSkuGroupAttrValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) ErrorName() string {
+	return "CreateGoodsRequestGoodsSkuGroupAttrValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsRequestGoodsSkuGroupAttrValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsRequestGoodsSkuGroupAttr.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsRequestGoodsSkuGroupAttrValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsRequestGoodsSkuGroupAttrValidationError{}
+
+// Validate checks the field values on CreateGoodsRequestGoodsSkuGroupAttrAttr
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
+func (m *CreateGoodsRequestGoodsSkuGroupAttrAttr) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// CreateGoodsRequestGoodsSkuGroupAttrAttr with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError, or nil if none found.
+func (m *CreateGoodsRequestGoodsSkuGroupAttrAttr) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateGoodsRequestGoodsSkuGroupAttrAttr) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetAttrId() < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{
+			field:  "AttrId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetAttrName()) < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{
+			field:  "AttrName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetAttrValueId() < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{
+			field:  "AttrValueId",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetAttrValueName()) < 1 {
+		err := CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{
+			field:  "AttrValueName",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError is an error wrapping
+// multiple validation errors returned by
+// CreateGoodsRequestGoodsSkuGroupAttrAttr.ValidateAll() if the designated
+// constraints aren't met.
+type CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateGoodsRequestGoodsSkuGroupAttrAttrMultiError) AllErrors() []error { return m }
+
+// CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError is the validation
+// error returned by CreateGoodsRequestGoodsSkuGroupAttrAttr.Validate if the
+// designated constraints aren't met.
+type CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) ErrorName() string {
+	return "CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateGoodsRequestGoodsSkuGroupAttrAttr.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateGoodsRequestGoodsSkuGroupAttrAttrValidationError{}

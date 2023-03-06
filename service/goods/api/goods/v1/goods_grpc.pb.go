@@ -24,6 +24,7 @@ const (
 	Goods_CreateGoodsSpecification_FullMethodName = "/goods.v1.Goods/CreateGoodsSpecification"
 	Goods_CreateAttrGroup_FullMethodName          = "/goods.v1.Goods/CreateAttrGroup"
 	Goods_CreateAttrValue_FullMethodName          = "/goods.v1.Goods/CreateAttrValue"
+	Goods_CreateGoods_FullMethodName              = "/goods.v1.Goods/CreateGoods"
 )
 
 // GoodsClient is the client API for Goods service.
@@ -39,6 +40,7 @@ type GoodsClient interface {
 	CreateAttrGroup(ctx context.Context, in *AttrGroupRequest, opts ...grpc.CallOption) (*AttrGroupResponse, error)
 	// 商品参数属性名和值
 	CreateAttrValue(ctx context.Context, in *AttrRequest, opts ...grpc.CallOption) (*AttrResponse, error)
+	CreateGoods(ctx context.Context, in *CreateGoodsRequest, opts ...grpc.CallOption) (*CreateGoodsResponse, error)
 }
 
 type goodsClient struct {
@@ -94,6 +96,15 @@ func (c *goodsClient) CreateAttrValue(ctx context.Context, in *AttrRequest, opts
 	return out, nil
 }
 
+func (c *goodsClient) CreateGoods(ctx context.Context, in *CreateGoodsRequest, opts ...grpc.CallOption) (*CreateGoodsResponse, error) {
+	out := new(CreateGoodsResponse)
+	err := c.cc.Invoke(ctx, Goods_CreateGoods_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoodsServer is the server API for Goods service.
 // All implementations must embed UnimplementedGoodsServer
 // for forward compatibility
@@ -107,6 +118,7 @@ type GoodsServer interface {
 	CreateAttrGroup(context.Context, *AttrGroupRequest) (*AttrGroupResponse, error)
 	// 商品参数属性名和值
 	CreateAttrValue(context.Context, *AttrRequest) (*AttrResponse, error)
+	CreateGoods(context.Context, *CreateGoodsRequest) (*CreateGoodsResponse, error)
 	mustEmbedUnimplementedGoodsServer()
 }
 
@@ -128,6 +140,9 @@ func (UnimplementedGoodsServer) CreateAttrGroup(context.Context, *AttrGroupReque
 }
 func (UnimplementedGoodsServer) CreateAttrValue(context.Context, *AttrRequest) (*AttrResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAttrValue not implemented")
+}
+func (UnimplementedGoodsServer) CreateGoods(context.Context, *CreateGoodsRequest) (*CreateGoodsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGoods not implemented")
 }
 func (UnimplementedGoodsServer) mustEmbedUnimplementedGoodsServer() {}
 
@@ -232,6 +247,24 @@ func _Goods_CreateAttrValue_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Goods_CreateGoods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateGoodsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoodsServer).CreateGoods(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Goods_CreateGoods_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoodsServer).CreateGoods(ctx, req.(*CreateGoodsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Goods_ServiceDesc is the grpc.ServiceDesc for Goods service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -258,6 +291,10 @@ var Goods_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateAttrValue",
 			Handler:    _Goods_CreateAttrValue_Handler,
+		},
+		{
+			MethodName: "CreateGoods",
+			Handler:    _Goods_CreateGoods_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

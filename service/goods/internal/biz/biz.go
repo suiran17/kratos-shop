@@ -14,9 +14,9 @@ var ProviderSet = wire.NewSet(
 	NewBrandUsecase,
 	NewSpecificationUsecase,
 	NewGoodsAttrUsecase,
-	// NewGoodsUsecase,
-	// NewGoodsSkuUsecase,
-	// NewInventoryUsecase,
+	NewGoodsUsecase,
+	NewGoodsSkuUsecase,
+	NewInventoryUsecase,
 	// NewEsGoodsUsecase,
 )
 

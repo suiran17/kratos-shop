@@ -118,3 +118,71 @@ Content-Type:application/json
     }
   ]
 }
+
+
+
+###
+GRPC localhost:50053/goods.v1.Goods/CreateGoods
+Content-Type:application/json
+
+{
+  "categoryId": 1,
+  "brandId": 2,
+  "typeId": 1,
+  "name": "华为 HUAWEI Mate 40",
+  "nameAlias": "华为 HUAWEI Mate 40 麒麟 9000 芯片, 超越感知莱卡电影五摄",
+  "goodsTags": "华为",
+  "goodsSn": "699900",
+  "marketPrice": 699900,
+  "inventory": 200,
+  "goodsBrief": "华为 Mate 40 Pro 5G",
+  "goodsFrontImage": "https://gitee.com/",
+  "goodsImages": [
+    "http://gitee.com/1",
+    "http://gitee.com/2",
+    "http://gitee.com/3"
+  ],
+  "shipFree": true,
+  "shipId": 1,
+  "isNew": true,
+  "isHot": true,
+  "onSale": true,
+  "sku": [
+    {
+      "skuName": "华为 HUAWEI Mate 40 亮黑色",
+      "code": "100010667255",
+      "barCode": "100010667255",
+      "price": 699900,
+      "promotionPrice": 699900,
+      "points": 699900,
+      "sort": 1,
+      "inventory": 100,
+      "specificationInfo": [
+        {
+          "sId": 1,
+          "vId": 1
+        },
+        {
+          "sId": 2,
+          "vId": 3
+        }
+      ],
+      "groupAttrInfo": [
+        {
+          "groupId": 1,
+          "groupName": "主体"
+        }
+      ]
+    }
+  ]
+
+}
+
+
+###
+GRPC localhost:50053/goods.v1.Goods/CreateGoodsSpecification
+Content-Type:application/json
+
+{
+//  "category"
+}

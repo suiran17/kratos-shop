@@ -22,6 +22,7 @@ service Goods {
     rpc CreateAttrValue(AttrRequest) returns(AttrResponse);
 
 
+    rpc CreateGoods(CreateGoodsRequest) returns (CreateGoodsResponse);
 }
 
 message CategoryInfoRequest {
@@ -132,4 +133,66 @@ message AttrResponse {
     bool status = 6;
     int32 sort = 7;
     repeated AttrValueResponse attrValue = 8;
+}
+
+
+message CreateGoodsRequest {
+    int64 id = 1;
+    int32 categoryId = 2 [(validate.rules).int32.gte = 1];
+    int32 brandId = 3 [(validate.rules).int32.gte = 1];
+    int64 typeId = 4 [(validate.rules).int64.gte = 1];
+    string name = 5 [(validate.rules).string.min_len = 1];
+    string nameAlias = 6;
+    string goodsTags = 7;
+    string goodsSn = 8 [(validate.rules).string.min_len = 1];
+    int64 shopPrice = 9;
+    int64 marketPrice = 10;
+    int64 inventory = 11;
+    string goodsBrief = 12;
+    string goodsFrontImage = 13;
+    repeated string goodsImages = 14;
+    bool shipFree = 15;
+    int32 shipId = 16;
+    bool isNew = 17;
+    bool isHot = 18;
+    bool onSale = 19;
+    // 根据商品类型 选择商品规格和商品属性信息
+    message goodsSku {
+        int64 id = 1;
+        int64 goodsId = 2;
+        string skuName = 3 [(validate.rules).string.min_len = 1];
+        string code = 4 [(validate.rules).string.min_len = 1];
+        string barCode = 5 [(validate.rules).string.min_len = 1];
+        int64 price = 6;
+        int64 promotionPrice = 7;
+        int64 points = 8;
+        string image = 9;
+        int32 sort = 10;
+        int64 inventory = 11;
+        // 商品规格
+        message specification {
+            int64 sId = 1 [(validate.rules).int64.gte = 1];
+            int64 vId = 2 [(validate.rules).int64.gte = 1];
+        }
+        repeated specification specificationInfo = 12;
+        // 商品属性组
+        message groupAttr {
+            int64 groupId = 1 [(validate.rules).int64.gte = 1];
+            string groupName = 2 [(validate.rules).string.min_len = 1];
+            message attr {
+                int64 attrId = 1 [(validate.rules).int64.gte = 1];
+                string attrName = 2 [(validate.rules).string.min_len = 1];
+                int64 attrValueId = 3 [(validate.rules).int64.gte = 1];
+                string attrValueName = 4 [(validate.rules).string.min_len = 1];
+            }
+            repeated attr attrInfo = 3;
+        }
+        repeated groupAttr groupAttrInfo = 13;
+    }
+    repeated goodsSku sku = 20;
+}
+
+
+message CreateGoodsResponse {
+    int64 ID = 1;
 }

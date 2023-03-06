@@ -33,6 +33,8 @@ func modelList() []interface{} {
 		&GoodsAttrGroup{},
 		&GoodsAttr{},
 		&GoodsAttrValue{},
+
+		&Brand{},
 	}
 }
 
@@ -134,6 +136,18 @@ type GoodsAttrValue struct {
 	AttrId    int64          `gorm:"index:property_name_id;type:int;comment:属性表ID;not null"`
 	GroupID   int64          `gorm:"index:attr_group_id;type:int;comment:商品属性分组ID;not null"`
 	Value     string         `gorm:"type:varchar(100);comment:属性值;not null"`
+	CreatedAt time.Time      `gorm:"column:add_time" json:"created_at"`
+	UpdatedAt time.Time      `gorm:"column:update_time" json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+
+type Brand struct {
+	ID        int32          `gorm:"primarykey;type:int" json:"id"`
+	Name      string         `gorm:"type:varchar(50);not null;comment:品牌名称" json:"name"`
+	Logo      string         `gorm:"type:varchar(200);default:;comment:品牌Logo图片"`
+	Desc      string         `gorm:"type:varchar(500);default:;comment:品牌描述"`
+	IsTab     bool           `gorm:"comment:是否显示;default:false" json:"is_tab"`
+	Sort      int32          `gorm:"comment:品牌排序;default:99;not null;type:int" json:"sort"`
 	CreatedAt time.Time      `gorm:"column:add_time" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"column:update_time" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
