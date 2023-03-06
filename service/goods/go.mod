@@ -8,6 +8,7 @@ require (
 	github.com/go-redis/redis/extra/redisotel v0.3.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/google/wire v0.5.0
+	github.com/jinzhu/copier v0.3.5
 	github.com/olivere/elastic/v7 v7.0.32
 	go.uber.org/automaxprocs v1.5.1
 	google.golang.org/grpc v1.46.2

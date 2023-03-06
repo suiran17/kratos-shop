@@ -5,6 +5,7 @@ import (
 	"goods/internal/biz"
 	"goods/internal/domain"
 
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -100,4 +101,16 @@ func (g goodsRepo) CreateGoods(c context.Context, goods *domain.Goods) (*domain.
 		return nil, result.Error
 	}
 	return product.ToDomain(), nil
+}
+
+func (g goodsRepo) GoodsListByIDs(c context.Context, ids ...int64) ([]*domain.Goods, error) {
+	var l []*Goods
+	if err := g.data.DB(c).Where("id IN (?)", ids).Find(&l).Error; err != nil {
+		return nil, errors.NotFound("GOODS_NOT_FOUND", "商品不存在")
+	}
+	var res []*domain.Goods
+	for _, item := range l {
+		res = append(res, item.ToDomain())
+	}
+	return res, nil
 }

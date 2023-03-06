@@ -33,6 +33,7 @@ var ProviderSet = wire.NewSet(
 	NewGoodsRepo,
 	NewGoodsSkuRepoRepo,
 	NewInventoryRepo,
+	NewEsGoodsRepo,
 
 	NewTransaction,
 
@@ -43,9 +44,7 @@ var ProviderSet = wire.NewSet(
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
-	db *gorm.DB
-
+	db       *gorm.DB
 	rdb      *redis.Client
 	EsClient *elastic.Client
 }

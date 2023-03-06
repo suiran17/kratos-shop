@@ -2,11 +2,13 @@ package data
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"goods/internal/biz"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
@@ -25,6 +27,16 @@ type Category struct {
 	DeletedAt        gorm.DeletedAt `json:"deleted_at"`
 }
 
+// GoodsCategoryBrand  商品和分类多对对的表
+type GoodsCategoryBrand struct {
+	ID         int32          `gorm:"primarykey;type:int" json:"id"` // bigint
+	CategoryID int32          `gorm:"type:int;index:idx_category_brand,unique;comment:商品和分类联合索引唯一"`
+	BrandsID   int32          `gorm:"type:int;index:idx_category_brand,unique:comment:商品和分类联合索引唯一"`
+	CreatedAt  time.Time      `gorm:"column:add_time" json:"created_at"`
+	UpdatedAt  time.Time      `gorm:"column:update_time" json:"updated_at"`
+	DeletedAt  gorm.DeletedAt `json:"deleted_at"`
+}
+
 type CategoryRepo struct {
 	data *Data
 	log  *log.Helper
@@ -36,6 +48,38 @@ func NewCategoryRepo(data *Data, logger log.Logger) biz.CategoryRepo {
 		data: data,
 		log:  log.NewHelper(logger),
 	}
+}
+
+func (r *CategoryRepo) DeleteCategory(ctx context.Context, id int32) error {
+	if res := r.data.db.Delete(&Category{}, id); res.RowsAffected == 0 {
+		return errors.InternalServer("DELETE_CATGORY_ERROR", res.Error.Error())
+	}
+	return nil
+}
+
+func (r *CategoryRepo) UpdateCategory(ctx context.Context, req *biz.CategoryInfo) error {
+	var category Category
+	if result := r.data.db.First(&category, req.ID); result.RowsAffected == 0 {
+		return errors.NotFound("CATEGORY_NOT_FOUND", "商品分类不存在")
+	}
+
+	if req.Name != "" {
+		category.Name = req.Name
+	}
+	if req.ParentCategory != 0 {
+		category.ParentCategoryID = req.ParentCategory
+	}
+	if req.Level != 0 {
+		category.Level = req.Level
+	}
+	if req.IsTab {
+		category.IsTab = req.IsTab
+	}
+	result := r.data.db.Save(&category)
+	if result.Error != nil {
+		return errors.InternalServer("CATEGORY_UPDATE_ERROR", "商品分类创建失败")
+	}
+	return nil
 }
 
 func (r *CategoryRepo) AddCategory(ctx context.Context, req *biz.CategoryInfo) (*biz.CategoryInfo, error) {
@@ -51,14 +95,14 @@ func (r *CategoryRepo) AddCategory(ctx context.Context, req *biz.CategoryInfo) (
 	if req.Level != 1 {
 		var categories Category
 		if res := r.data.db.First(&categories, req.ParentCategory); res.RowsAffected == 0 {
-			return nil, errors.New("商品分类不存在")
+			return nil, errors.NotFound("CATEGORY_NOT_FOUND", "商品分类不存在")
 		}
 		cMap["parent_category_id"] = req.ParentCategory
 	}
 
 	result := r.data.db.Model(&Category{}).Create(&cMap)
 	if result.Error != nil {
-		return nil, result.Error
+		return nil, errors.InternalServer("CATEGORY_CREATE_ERROR", result.Error.Error())
 	}
 	var value int32
 	value, ok := cMap["parent_category_id"].(int32)
@@ -73,12 +117,31 @@ func (r *CategoryRepo) AddCategory(ctx context.Context, req *biz.CategoryInfo) (
 		Sort:           cMap["sort"].(int32),
 	}
 	return res, nil
+
+}
+
+func (r *CategoryRepo) Category(ctx context.Context) ([]*biz.Category, error) {
+	var cate []*Category
+	result := r.data.db.Where(&Category{Level: 1}).Preload("SubCategory.SubCategory").Find(&cate)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, errors.NotFound("CATEGORY_NOT_FOUND", "分类不存在")
+	}
+	if result.Error != nil {
+		return nil, errors.InternalServer("CATEGORY_NOT_FOUND", result.Error.Error())
+	}
+
+	var res []*biz.Category
+	err := copier.Copy(&res, &cate)
+	if err != nil {
+		return nil, errors.InternalServer("CATEGORY_COPY_ERROR", err.Error())
+	}
+	return res, nil
 }
 
 func (r *CategoryRepo) GetCategoryByID(ctx context.Context, id int32) (*biz.CategoryInfo, error) {
 	var categories Category
 	if res := r.data.db.First(&categories, id); res.RowsAffected == 0 {
-		return nil, errors.New("商品分类不存在")
+		return nil, errors.NotFound("CATEGORY_NOT_FOUND", "分类不存在")
 	}
 
 	info := &biz.CategoryInfo{
@@ -90,4 +153,55 @@ func (r *CategoryRepo) GetCategoryByID(ctx context.Context, id int32) (*biz.Cate
 		Sort:           categories.Sort,
 	}
 	return info, nil
+}
+
+func (r *CategoryRepo) SubCategory(ctx context.Context, req biz.CategoryInfo) ([]*biz.CategoryInfo, error) {
+	var subCategory []Category
+	var subCategoryInfo []*biz.CategoryInfo
+	preload := "SubCategory"
+	if req.Level == 1 {
+		preload = "SubCategory.SubCategory"
+	}
+
+	if err := r.data.db.Where(&Category{ParentCategoryID: req.ID}).Preload(preload).Find(&subCategory).Error; err != nil {
+		return nil, errors.NotFound("CATEGORY_NOT_FOUND", "分类不存在")
+	}
+	for _, v := range subCategory {
+		subCategoryInfo = append(subCategoryInfo, &biz.CategoryInfo{
+			ID:             v.ID,
+			Name:           v.Name,
+			ParentCategory: v.ParentCategoryID,
+			Level:          v.Level,
+			IsTab:          v.IsTab,
+			Sort:           v.Sort,
+		})
+	}
+
+	return subCategoryInfo, nil
+}
+
+func (r *CategoryRepo) GetCategoryAll(ctx context.Context, level, id int32) ([]interface{}, error) {
+	categoryIds := make([]interface{}, 0)
+	var subQuery string
+	// 把一级级分类下的所有三级分类都拿到
+	if level == 1 {
+		subQuery = fmt.Sprintf("SELECT id FROM categories WHERE parent_category_id IN (SELECT id FROM categories WHERE parent_category_id=%d)", id)
+	} else if level == 2 {
+		subQuery = fmt.Sprintf("SELECT id FROM categories WHERE parent_category_id=%d", id)
+	} else if level == 3 {
+		subQuery = fmt.Sprintf("SELECT id FROM categories WHERE id=%d", id)
+	}
+
+	type Result struct {
+		ID int32
+	}
+
+	var results []Result
+	if err := r.data.db.Table("categories").Model(Category{}).Raw(subQuery).Scan(&results).Error; err != nil {
+		return nil, errors.InternalServer("CATEGORY_ERROR", err.Error())
+	}
+	for _, re := range results {
+		categoryIds = append(categoryIds, re.ID)
+	}
+	return categoryIds, nil
 }

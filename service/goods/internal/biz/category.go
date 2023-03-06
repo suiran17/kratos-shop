@@ -27,7 +27,12 @@ type CategoryInfo struct {
 
 type CategoryRepo interface {
 	AddCategory(context.Context, *CategoryInfo) (*CategoryInfo, error)
+	UpdateCategory(context.Context, *CategoryInfo) error
+	Category(context.Context) ([]*Category, error)
 	GetCategoryByID(ctx context.Context, id int32) (*CategoryInfo, error)
+	SubCategory(context.Context, CategoryInfo) ([]*CategoryInfo, error)
+	DeleteCategory(context.Context, int32) error
+	GetCategoryAll(context.Context, int32, int32) ([]interface{}, error)
 }
 
 type CategoryUsecase struct {
