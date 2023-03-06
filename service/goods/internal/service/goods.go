@@ -15,7 +15,7 @@ type GoodsService struct {
 	bc  *biz.BrandUsecase
 	gt  *biz.GoodsTypeUsecase
 	s   *biz.SpecificationUsecase
-	// ga      *biz.GoodsAttrUsecase
+	ga  *biz.GoodsAttrUsecase
 	// g       *biz.GoodsUsecase
 	// esGoods *biz.EsGoodsUsecase
 
@@ -28,7 +28,7 @@ func NewGoodsService(
 	cac *biz.CategoryUsecase,
 	gt *biz.GoodsTypeUsecase,
 	s *biz.SpecificationUsecase,
-// ga *biz.GoodsAttrUsecase,
+	ga *biz.GoodsAttrUsecase,
 // gc *biz.GoodsUsecase,
 // esGoods *biz.EsGoodsUsecase,
 	logger log.Logger,
@@ -38,7 +38,7 @@ func NewGoodsService(
 		cac: cac,
 		gt:  gt,
 		s:   s,
-		// ga:      ga,
+		ga:  ga,
 		// g:       gc,
 		// esGoods: esGoods,
 		log: log.NewHelper(logger),

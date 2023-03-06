@@ -29,6 +29,10 @@ func modelList() []interface{} {
 
 		&SpecificationsAttr{},
 		&SpecificationsAttrValue{},
+
+		&GoodsAttrGroup{},
+		&GoodsAttr{},
+		&GoodsAttrValue{},
 	}
 }
 
@@ -93,6 +97,43 @@ type SpecificationsAttrValue struct {
 	AttrId    int64          `gorm:"index:attr_id;type:int;comment:规格ID;not null"`
 	Value     string         `gorm:"type:varchar(250);not null;comment:规格参数信息值" json:"value"`
 	Sort      int32          `gorm:"comment:规格参数值排序;default:99;not null;type:int" json:"sort"`
+	CreatedAt time.Time      `gorm:"column:add_time" json:"created_at"`
+	UpdatedAt time.Time      `gorm:"column:update_time" json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+
+// GoodsAttrGroup  商品属性分组表  手机 -> 主体->屏幕,操作系统,网络支持,基本信息
+type GoodsAttrGroup struct {
+	ID          int64          `gorm:"primarykey;type:int" json:"id"`
+	GoodsTypeID int64          `gorm:"index:goods_type_id;type:int;comment:商品类型ID;not null"`
+	Title       string         `gorm:"type:varchar(100);comment:属性名;not null"`
+	Desc        string         `gorm:"type:varchar(200);comment:属性描述;default:false;not null"`
+	Status      bool           `gorm:"comment:状态;default:false;not null"`
+	Sort        int32          `gorm:"type:int;comment:商品属性排序字段;not null"`
+	CreatedAt   time.Time      `gorm:"column:add_time" json:"created_at"`
+	UpdatedAt   time.Time      `gorm:"column:update_time" json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
+}
+
+// GoodsAttr 商品属性表 主体->产品名称,上市月份,机身宽度
+type GoodsAttr struct {
+	ID          int64          `gorm:"primarykey;type:int" json:"id"`
+	GoodsTypeID int64          `gorm:"index:goods_type_id;type:int;comment:商品类型ID;not null"`
+	GroupID     int64          `gorm:"index:attr_group_id;type:int;comment:商品属性分组ID;not null"`
+	Title       string         `gorm:"type:varchar(100);comment:属性名;not null"`
+	Desc        string         `gorm:"type:varchar(200);comment:属性描述;default:false;not null"`
+	Status      bool           `gorm:"comment:状态;default:false;not null"`
+	Sort        int32          `gorm:"type:int;comment:商品属性排序字段;not null"`
+	CreatedAt   time.Time      `gorm:"column:add_time" json:"created_at"`
+	UpdatedAt   time.Time      `gorm:"column:update_time" json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
+}
+
+type GoodsAttrValue struct {
+	ID        int64          `gorm:"primarykey;type:int" json:"id"`
+	AttrId    int64          `gorm:"index:property_name_id;type:int;comment:属性表ID;not null"`
+	GroupID   int64          `gorm:"index:attr_group_id;type:int;comment:商品属性分组ID;not null"`
+	Value     string         `gorm:"type:varchar(100);comment:属性值;not null"`
 	CreatedAt time.Time      `gorm:"column:add_time" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"column:update_time" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`

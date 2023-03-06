@@ -86,3 +86,35 @@ Content-Type:application/json
   ]
 }
 
+
+###
+GRPC localhost:50053/goods.v1.Goods/CreateAttrGroup
+Content-Type:application/json
+
+{
+  "typeId": 1,
+  "title": "主体",
+  "desc": "商品主体信息",
+  "status": true,
+  "sort": 1
+}
+
+
+###
+GRPC localhost:50053/goods.v1.Goods/CreateAttrValue
+Content-Type:application/json
+
+{
+  "typeId": 1,
+  "groupId": 1,
+  "title": "上市年份",
+  "desc": "上市年份",
+  "status": true,
+  "sort": 1,
+  "attrValue": [
+    {
+      "groupId": 1,
+      "value": "2021年"
+    }
+  ]
+}

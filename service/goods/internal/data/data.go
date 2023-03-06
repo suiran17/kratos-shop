@@ -4,6 +4,7 @@ import (
 	"context"
 	"goods/internal/biz"
 	"goods/internal/conf"
+	"goods/internal/domain"
 	slog "log"
 	"os"
 	"time"
@@ -28,6 +29,7 @@ var ProviderSet = wire.NewSet(
 	NewGoodsTypeRepo,
 	NewBrandRepo,
 	NewSpecificationRepo,
+	NewGoodsAttrRepo,
 
 	NewTransaction,
 
@@ -140,4 +142,21 @@ func (d *Data) ExecTx(ctx context.Context, fn func(ctx context.Context) error) e
 		ctx = context.WithValue(ctx, contextTxKey{}, tx)
 		return fn(ctx)
 	})
+}
+
+func (g *goodsAttrRepo) CreateGoodsGroupAttr(ctx context.Context, a *domain.AttrGroup) (*domain.AttrGroup, error) {
+	group := GoodsAttrGroup{
+		GoodsTypeID: a.TypeID,
+		Title:       a.Title,
+		Desc:        a.Desc,
+		Status:      a.Status,
+		Sort:        a.Sort,
+	}
+
+	result := g.data.db.Save(&group)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return group.ToDomain(), nil
 }

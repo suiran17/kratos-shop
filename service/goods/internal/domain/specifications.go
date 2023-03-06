@@ -18,12 +18,12 @@ type SpecificationValue struct {
 	Sort   int32
 }
 
-// 新增判断类型不能为空的方法
+// IsTypeIDEmpty 新增判断类型不能为空的方法
 func (b *Specification) IsTypeIDEmpty() bool {
 	return b.TypeID == 0
 }
 
-// 规格下面的参数不能为空的方法
+// IsValueEmpty 规格下面的参数不能为空的方法
 func (b *Specification) IsValueEmpty() bool {
 	return b.SpecificationValue == nil
 }
