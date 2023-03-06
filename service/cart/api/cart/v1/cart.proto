@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.cart.v1;
+
+option go_package = "cart/api/cart/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cart.v1";
+
+service Cart {
+	rpc CreateCart (CreateCartRequest) returns (CreateCartReply);
+	rpc UpdateCart (UpdateCartRequest) returns (UpdateCartReply);
+	rpc DeleteCart (DeleteCartRequest) returns (DeleteCartReply);
+	rpc GetCart (GetCartRequest) returns (GetCartReply);
+	rpc ListCart (ListCartRequest) returns (ListCartReply);
+}
+
+message CreateCartRequest {}
+message CreateCartReply {}
+
+message UpdateCartRequest {}
+message UpdateCartReply {}
+
+message DeleteCartRequest {}
+message DeleteCartReply {}
+
+message GetCartRequest {}
+message GetCartReply {}
+
+message ListCartRequest {}
+message ListCartReply {}
