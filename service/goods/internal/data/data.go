@@ -1,6 +1,8 @@
 package data
 
 import (
+	"context"
+	"goods/internal/biz"
 	"goods/internal/conf"
 	slog "log"
 	"os"
@@ -21,7 +23,12 @@ import (
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
 	NewData,
+
 	NewCategoryRepo,
+	NewGoodsTypeRepo,
+	NewBrandRepo,
+
+	NewTransaction,
 
 	NewDB,
 	NewRedis,
@@ -36,6 +43,9 @@ type Data struct {
 	rdb      *redis.Client
 	EsClient *elastic.Client
 }
+
+// 用来承载事务的上下文
+type contextTxKey struct{}
 
 // NewData .
 func NewData(c *conf.Data, logger log.Logger, db *gorm.DB, rdb *redis.Client, es *elastic.Client) (*Data, func(), error) {
@@ -107,4 +117,26 @@ func NewElasticsearch(c *conf.Data) *elastic.Client {
 	}
 
 	return es
+}
+
+// DB 根据此方法来判断当前的 db 是不是使用 事务的 DB
+func (d *Data) DB(ctx context.Context) *gorm.DB {
+	tx, ok := ctx.Value(contextTxKey{}).(*gorm.DB)
+	if ok {
+		return tx
+	}
+	return d.db
+}
+
+// NewTransaction .
+func NewTransaction(d *Data) biz.Transaction {
+	return d
+}
+
+// ExecTx gorm Transaction
+func (d *Data) ExecTx(ctx context.Context, fn func(ctx context.Context) error) error {
+	return d.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		ctx = context.WithValue(ctx, contextTxKey{}, tx)
+		return fn(ctx)
+	})
 }

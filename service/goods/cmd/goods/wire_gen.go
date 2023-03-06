@@ -33,7 +33,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	}
 	categoryRepo := data.NewCategoryRepo(dataData, logger)
 	categoryUsecase := biz.NewCategoryUsecase(categoryRepo, logger)
-	goodsService := service.NewGoodsService(categoryUsecase, logger)
+	goodsTypeRepo := data.NewGoodsTypeRepo(dataData, logger)
+	transaction := data.NewTransaction(dataData)
+	brandRepo := data.NewBrandRepo(dataData, logger)
+	goodsTypeUsecase := biz.NewGoodsTypeUsecase(goodsTypeRepo, transaction, brandRepo, logger)
+	goodsService := service.NewGoodsService(categoryUsecase, goodsTypeUsecase, logger)
 	grpcServer := server.NewGRPCServer(confServer, goodsService, logger)
 	app := newApp(logger, grpcServer)
 	return app, func() {

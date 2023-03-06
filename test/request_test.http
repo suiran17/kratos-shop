@@ -42,3 +42,24 @@ Content-Type:application/json
   "isTab": true,
   "sort": 1
 }
+###
+
+
+
+
+
+
+###
+GRPC localhost:50053/goods.v1.Goods/CreateGoodsType
+Content-Type:application/json
+
+{
+  "id": 20,
+  "name": "手机",
+  "typeCode": "100000",
+  "nameAlias": "手机通讯",
+  "isVirtual": true,
+  "desc": "手机通讯",
+  "sort": 1
+}
+

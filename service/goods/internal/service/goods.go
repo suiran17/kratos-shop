@@ -12,7 +12,7 @@ type GoodsService struct {
 	v1.UnimplementedGoodsServer
 	cac *biz.CategoryUsecase
 	// bc      *biz.BrandUsecase
-	// gt      *biz.GoodsTypeUsecase
+	gt *biz.GoodsTypeUsecase
 	// s       *biz.SpecificationUsecase
 	// ga      *biz.GoodsAttrUsecase
 	// g       *biz.GoodsUsecase
@@ -24,7 +24,7 @@ type GoodsService struct {
 func NewGoodsService(
 // bc *biz.BrandUsecase,
 	cac *biz.CategoryUsecase,
-// gt *biz.GoodsTypeUsecase,
+	gt *biz.GoodsTypeUsecase,
 // s *biz.SpecificationUsecase,
 // ga *biz.GoodsAttrUsecase,
 // gc *biz.GoodsUsecase,
@@ -34,7 +34,7 @@ func NewGoodsService(
 	return &GoodsService{
 		// bc:      bc,
 		cac: cac,
-		// gt:      gt,
+		gt:  gt,
 		// s:       s,
 		// ga:      ga,
 		// g:       gc,
