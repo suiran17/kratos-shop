@@ -16,3 +16,29 @@ Content-Type: application/json
 
 ###
 
+GRPC localhost:50052/shop.shop.v1.Shop/Register
+Content-Type: application/json
+
+{
+  "mobile": "18800277236",
+  "username": "zhangSan",
+  "password": "admin123"
+}
+
+###
+
+
+
+# goods
+#
+###
+GRPC localhost:50053/goods.v1.Goods/CreateCategory
+Content-Type:application/json
+
+{
+  "name": "华为",
+  "parentCategory": 1,
+  "level": 1,
+  "isTab": true,
+  "sort": 1
+}

@@ -33,9 +33,10 @@ syntax = "proto3";
 
 package user.v1;
 
-import "google/api/annotations.proto";
+//import "google/api/annotations.proto";
 //import "google.golang.org/protobuf/types/known/emptypb";
-import "google/protobuf/Empty.proto";
+//import "google/protobuf/Empty.proto";
+import "google/protobuf/empty.proto";
 
 
 
