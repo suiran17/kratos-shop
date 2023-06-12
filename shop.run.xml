@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="shop" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="kratos-shop" />
+    <working_directory value="$PROJECT_DIR$/shop" />
+    <parameters value="-conf ./configs" />
+    <kind value="PACKAGE" />
+    <package value="shop/cmd/shop" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/shop/cmd/shop/main.go" />
+    <method v="2" />
+  </configuration>
+</component>
