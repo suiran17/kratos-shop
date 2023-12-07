@@ -2,9 +2,10 @@ package data
 
 import (
 	"context"
+	"time"
+
 	userV1 "shop/api/service/user/v1"
 	"shop/internal/conf"
-	"time"
 
 	consul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -36,8 +37,8 @@ func NewData(c *conf.Data, uc userV1.UserClient, logger log.Logger) (*Data, erro
 func NewUserServiceClient(ac *conf.Auth, sr *conf.Service, rr registry.Discovery) userV1.UserClient {
 	conn, err := grpc.DialInsecure(
 		context.Background(),
-		grpc.WithEndpoint(sr.User.Endpoint), // consul
-		grpc.WithDiscovery(rr),              // consul
+		grpc.WithEndpoint(sr.User.Endpoint), // consul      // discovery:///shop.user.service
+		grpc.WithDiscovery(rr),              // consul      // discovery:///shop.goods.service
 		grpc.WithMiddleware(
 			tracing.Client(), // 链路追踪
 			recovery.Recovery(),

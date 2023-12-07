@@ -26,11 +26,11 @@ server:
 data:
   database:
     driver: mysql
-    source: root:root123@tcp(dev.in:13306)/shop_user?charset=utf8mb4&parseTime=True&loc=Local
+    source: root:root123@tcp(srv.in:13306)/shop_user?charset=utf8mb4&parseTime=True&loc=Local
   redis:
     addr: 127.0.0.1:6379
     dial_timeout: 1s
     read_timeout: 0.2s
     write_timeout: 0.2s
 trace:
-  endpoint: http://tx.tk93.top:14268/api/traces
+  endpoint: http://srv.in:14268/api/traces

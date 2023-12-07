@@ -1,6 +1,7 @@
 package unittest
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func TestDbInit(t *testing.T) {
-	dsn := "root:root123@tcp(tx.tk93.top:13306)/shop_user?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:root123@tcp(srv.in:13306)/shop_user?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -151,4 +152,20 @@ type Brand struct {
 	CreatedAt time.Time      `gorm:"column:add_time" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"column:update_time" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+
+func TestD1(t *testing.T) {
+
+}
+
+func TestDate(t *testing.T) {
+	format := "Y/m/d/H-i-s"
+
+	var val1 = 1
+	var val2 = 2
+	fmt.Println(val1, val2)
+
+	// s := tool.Date(format, time.Now(), time.Now())
+
+	t.Log(format)
 }
