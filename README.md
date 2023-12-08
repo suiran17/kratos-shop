@@ -42,7 +42,7 @@ cd service/user && kratos run
 
 ## 2. shop
 ```bash 
-cd service/shop && kratos run 
+cd shop && kratos run 
 ```
 
 

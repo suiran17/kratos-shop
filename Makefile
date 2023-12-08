@@ -1,0 +1,7 @@
+# 启动服务
+up_user:
+	cd service/user && kratos run
+
+
+up_shop:
+	cd shop && kratos run
