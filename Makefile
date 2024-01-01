@@ -5,3 +5,6 @@ up_user:
 
 up_shop:
 	cd shop && kratos run
+
+up_goods:
+	cd service/goods && kratos run

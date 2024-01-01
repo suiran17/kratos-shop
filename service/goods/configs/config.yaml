@@ -16,4 +16,4 @@ data:
     write_timeout: 0.2s
 
   elastic:
-    addr: http://127.0.0.1:9200
+    addr: http://srv.in:19200
